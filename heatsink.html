@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+	<script src="heatsink_simulator.js" defer></script>
+	<style>
+		table{
+			border-collapse:collapse;
+			line-height:0;
+		}
+		td{
+			display:inline-block;
+			height:1em;
+			width:1em;
+			position:relative;
+		}
+		tr:not(.marked)+tr.marked .marked{
+			border-top:2px solid black;
+			margin-top:-2px;
+		}
+
+		tr.marked>td:not(.marked)+td.marked{
+			border-left:2px solid black;
+			margin-right:-2px;
+		}
+		tr.marked>td.marked{
+			bottom:2px;
+			border-bottom:2px solid black;
+			margin-bottom:-2px;
+		}
+		tr.marked>td.marked+td:not(.marked){
+			border-left:2px solid black;
+			margin-left:-2px;
+		}
+
+	form { display:block; line-height:2em;}
+	form label{float:left;width:90vw;}
+	form input{float:left;clear:left;width:4em;margin-right:0.5em}
+	form input[type="button"]{width:6em; clear:none;}
+	form+*{clear:left;}
+	</style>
+</head>
+<body>
+	<form>
+		<input type="number" id="cell" value='1'><label for='cell'>mm - Simulation cell width/height (=minimum wall diameter) </label>
+		<input type="number" id="width" value='40'><label for='width'>mm - Simulation window width (~fan or air-duct width) </label>
+		<input type="number" id="height" value='40'><label for='height'>mm - Simulation window height (~fan or air-duct height) </label>
+		<input type="number" id="envtemp" value='30'><label for='envtemp'>&deg;C - Ambient temperature (estimate, only used to estimate final source-temp based on total heat-flux)</label>
+		<input id="clearence" type='number' value=15><label for='clearence'>mm - distance between left sim. edge and start of source (can be mirrored if set to 0)</label>
+		<input id="source_width" type='number' value=10><label for='source_width'>mm - Width of source (has to be lower than [simulation width - separation])</label>
+		<input type='number' id="nofsteps" value='50' min='1' max='100'><label for="nofsteps"> number of steps to simulate per run</label>
+		<div>DISPLAY:</div>
+		<input type='radio' value='heat' id='heat' checked name="selection" onclick="Draw();"><label for='heat'>Show Heat-Distribution (hot=red, black=zero)</label>
+		<input type='radio' value='flow' id='flow' name="selection" onclick="Draw();"><label for='flow'>Show Air-Flow-Distribution (fast=red, black=heatsink)</label>
+		<input type="button" id="run_simulation" value="Grow on" onclick="RunSimulation();return false;">
+		<input type="button" id="reset_simulation" value="RESET" onclick="ResetSimulation();return false;">
+	</form>
+	<div id="result"></div>
+	<div id='details'></div>
+</body>
